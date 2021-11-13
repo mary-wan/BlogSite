@@ -4,6 +4,7 @@ from flask_login import login_required,current_user
 from ..models import User,Pitch,Comment,Upvote,Downvote
 from .forms import UpdateProfile,PitchForm,CommentForm
 from .. import db,photos
+from ..request import get_quotes
 
 
 @main.route('/')
@@ -13,8 +14,8 @@ def index():
     interview = Pitch.query.filter_by(category = 'Interview').all() 
     product = Pitch.query.filter_by(category = 'Product').all()
     technology = Pitch.query.filter_by(category = 'Technology').all() 
-    
-    return render_template('index.html', interview = interview,product = product, pitches = pitches,advertisement= advertisement,technology=technology)
+    quotes = get_quotes()
+    return render_template('index.html', interview = interview,product = product, pitches = pitches,advertisement= advertisement,technology=technology,quotes =quotes)
 
 @main.route('/create_new', methods = ['POST','GET'])
 @login_required
