@@ -19,7 +19,7 @@ def index():
 
         new_subscriber=Subscriber(email=email)
         new_subscriber.save_subscriber()
-        mail_message("Subscribed to D-Blog","email/subscribe",new_subscriber.email,new_subscriber=new_subscriber)
+        mail_message("Subscribed to BlogHub","email/subscribe",new_subscriber.email,new_subscriber=new_subscriber)
         flash('Sucessfully subscribed')
         return redirect(url_for('main.index'))
     
