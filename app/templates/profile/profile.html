@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block content %}
-<div class="container-fluid pt-3">
+<div class="container-fluid pt-3"> 
     <div class="row">
         <div class="col-md-5">
             <h5 class="title">My Profile</h5>
@@ -15,11 +15,11 @@
                     {% if user.profile_pic_path %}
 
                     <img src="{{url_for('static',filename=user.profile_pic_path)}}" alt=""
-                        class="img-thumbnail rounded-circle account-img">
+                        class="img-thumbnail rounded-circle profile-photo">
 
                     {%else%}
                     <img src="{{url_for('static', filename='photos/default.png')}}" alt=""
-                        class="img-thumbnail rounded-circle account-img">
+                        class="img-thumbnail rounded-circle profile-photo">
                     {% endif %}
                     <div class="media-body">
                         <h2 class="account-heading">{{ current_user.username }}</h2>

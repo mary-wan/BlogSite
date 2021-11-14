@@ -19,11 +19,11 @@
             {% for comment in comments %}
             <article class="media content-section">
                 <div class="media-body">
-                  <div class="article-metadata">
+                  <div class="blog-details">
                     <a class="mr-2" href="#">{{ comment.user.username }}</a>
                   </div>
-                  <h5 class="article-title">{{ comment.pitch.title }}</h5>
-                  <p class="article-content">{{ comment.comment }}</p>
+                  <h5 class="blog-title">{{ comment.pitch.title }}</h5>
+                  <p class="blog-article">{{ comment.comment }}</p>
                   <div>
                     <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal"
                       data-target=".deleteModal-modal-sm">Delete</button>

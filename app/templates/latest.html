@@ -14,19 +14,19 @@
         <article class="media content-section col-md-8">
                 {% if pitch.user.profile_pic_path %}
                 <img src="{{url_for('static',filename=pitch.user.profile_pic_path)}}" alt=""
-                    class="rounded-circle article-img">  
+                    class="rounded-circle blog-profile">  
                 {%else%}
                 <img src="{{url_for('static', filename='photos/default.png')}}" alt=""
-                    class="rounded-circle article-img">
+                    class="rounded-circle blog-profile">
                 {% endif %}               
 
             <div class="media-body">
-                <div class="article-metadata">
+                <div class="blog-details">
                     <p>Blog by: <strong>{{ pitch.user.username }}</strong> </p>
                     <small class="text-muted">Posted on {{ pitch.time.strftime('%Y-%m-%d') }}</small>
                 </div>
-                <h5 class="article-title">{{ pitch.title }}</h5>
-                <p class="article-content">{{ pitch.post }}</p>
+                <h5 class="blog-title">{{ pitch.title }}</h5>
+                <p class="blog-article">{{ pitch.post }}</p>
                 <span>
                     <a class="btn btn-info btn-sm  mb-1 comment-button ml-1"
                     href="{{url_for('main.comment',pitch_id = pitch.id)}}">Comment</a>
