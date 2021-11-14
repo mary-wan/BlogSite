@@ -10,12 +10,8 @@ from ..request import get_quotes
 @main.route('/')
 def index():
     pitches = Pitch.query.all()
-    advertisement = Pitch.query.filter_by(category = 'Advertisement').all()
-    interview = Pitch.query.filter_by(category = 'Interview').all() 
-    product = Pitch.query.filter_by(category = 'Product').all()
-    technology = Pitch.query.filter_by(category = 'Technology').all() 
     quotes = get_quotes()
-    return render_template('index.html', interview = interview,product = product, pitches = pitches,advertisement= advertisement,technology=technology,quotes =quotes)
+    return render_template('index.html', pitches = pitches,quotes =quotes, user=current_user)
 
 @main.route('/create_new', methods = ['POST','GET'])
 @login_required
@@ -24,13 +20,12 @@ def new_pitch():
     if form.validate_on_submit():
         title = form.title.data
         post = form.post.data
-        category = form.category.data
-        
-        new_pitch = Pitch(title = title,post=post,category=category,user=current_user)
+              
+        new_pitch = Pitch(title = title,post=post,user=current_user)
         new_pitch.save_pitch()
         return redirect(url_for('main.index'))
         
-    return render_template('new_pitch.html', form = form)
+    return render_template('new_blog.html', form = form)
 
 @main.route('/comment/<int:pitch_id>', methods = ['POST','GET'])
 @login_required
@@ -75,35 +70,7 @@ def update_profile(uname):
 
     return render_template('profile/update.html',form =form)
 
-@main.route('/like/<int:id>',methods = ['POST','GET'])
-@login_required
-def upvote(id):
-    pitches = Upvote.get_upvotes(id)
-    usr_id = f'{current_user.id}:{id}'
-    for pitch in pitches:
-        to_string = f'{pitch}'
-        if usr_id == to_string:
-            return redirect(url_for('main.index',id=id))
-        else:
-            continue
-    new_vote = Upvote(user = current_user, pitch_id=id)
-    new_vote.save()
-    return redirect(url_for('main.index',id=id))
 
-@main.route('/dislike/<int:id>',methods = ['POST','GET'])
-@login_required
-def downvote(id):
-    pitches = Downvote.get_downvotes(id)
-    usr_id = f'{current_user.id}:{id}'
-    for pitch in pitches:
-        to_string = f'{pitch}'
-        if usr_id == to_string:
-            return redirect(url_for('main.index',id=id))
-        else:
-            continue
-    new_downvote = Downvote(user = current_user, pitch_id=id)
-    new_downvote.save()
-    return redirect(url_for('main.index',id = id))
 
 @main.route('/user/<uname>/update/pic',methods= ['POST'])
 @login_required

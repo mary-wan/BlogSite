@@ -46,8 +46,8 @@ footer p{
     padding: 0px !important;
     margin: 0px !important;
 }
-.title{
-    color:  #a57467 !important;
+.title{ 
+    color: #a57467!important;
 }
 .italic{
     font-family: 'Lato', sans-serif;
@@ -74,4 +74,11 @@ footer p{
   }
   .icon{
       height: 20px;
+  }
+  .form-section {
+    padding: 10px 20px;
+    border: 1px solid #dddddd;
+    border-radius: 3px;
+    margin-bottom: 20px;
+    height: fit-content;
   }

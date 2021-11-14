@@ -8,7 +8,7 @@ def get_quotes():
        
     author = get_quotes_response.get("author")
     quote = get_quotes_response.get("quote")
-    
+        
     new_quote = Quote(author,quote)
     return new_quote
         
