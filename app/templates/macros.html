@@ -27,16 +27,16 @@
     <div class="modal-dialog modal-sm" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="deleteModalLabel">Are you sure you want to delete?</h5>
+          <p class="modal-title" id="deleteModalLabel">Are you sure you want to delete?</p>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <form action="#" method="POST">
-            <input class="btn btn-danger" type="submit" value="Delete">
-          </form>
+          <form action="{{ url_for('main.delete_post', pitch_id = pitch.id) }}" method="POST">
+            <input class="btn btn-danger btn-sm" type="submit" value="Delete">
+        </form>
         </div>
       </div>
     </div>

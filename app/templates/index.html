@@ -44,9 +44,8 @@
                     </div>
                     <h5 class="article-title">{{ pitch.title }}</h5>
                     <p class="article-content">{{ pitch.post }}</p>
-
                     <span>
-                        <a class="btn btn-info btn-sm mt-1 mb-1 comment-button ml-1"
+                        <a class="btn btn-info btn-sm  mb-1 comment-button ml-1"
                         href="{{url_for('main.comment',pitch_id = pitch.id)}}">Comment</a>
                         <a class="ml-2" href="{{url_for('main.comment',pitch_id = pitch.id)}}"><span
                                 style="font-size: 1em;  color:black"><i class="fas fa-comment-alt"></i></i></span>
@@ -80,14 +79,14 @@
         </div>
         <div class="col-md-1">
         </div>
-        <div class="col-md-3 mt-3">
+        <div class="col-md-3 mt-3 motivation">
             <div class="content-section">
                 <h6 class="title italic">Daily Motivation</h6>
                 <p><i class="fa fa-quote-left"></i> {{quotes.quote}} <i class="fa fa-quote-right"></i></p>
                 <p class="text-center">--- {{quotes.author}} ---</p>
             </div>
            
-            {{wtf.quick_form(form ,button_map={'submit':'info'})}}
+            {{wtf.quick_form(form ,button_map={'submit':'info btn-sm'})}}
         </div>
     </div>
 </div>

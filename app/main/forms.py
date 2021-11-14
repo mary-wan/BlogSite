@@ -21,5 +21,5 @@ class UpdateBlog(FlaskForm):
     submit = SubmitField('Submit Blog')
     
 class SubscribeForm(FlaskForm):
-    email = StringField('Email',validators=[Required(),Email()],render_kw={'class': 'form-control', 'rows': 1})
+    email = StringField('Email',validators=[Required(),Email()],render_kw={"placeholder": "Enter email.."})
     submit = SubmitField('Subscribe')

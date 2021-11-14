@@ -117,3 +117,6 @@ footer p{
     color: #428bca;
     text-decoration: none;
   }
+  .motivation label{
+    display: none;
+  }

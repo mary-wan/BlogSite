@@ -11,7 +11,7 @@ from ..request import get_quotes
 
 @main.route('/',methods = ['POST','GET'])
 def index():
-    pitches = Pitch.query.all()
+    pitches = Pitch.query.order_by(Pitch.time.desc()).all()
     quotes = get_quotes()
     form = SubscribeForm()
     if form.validate_on_submit():
@@ -92,14 +92,14 @@ def update_pic(uname):
     return redirect(url_for('main.profile',uname=uname))
 
 
-@main.route("/pitch/<int:pitch_id>/delete",methods= ['POST'])
+@main.route("/delete_post/<int:pitch_id>/delete",methods= ['POST'])
 @login_required
 def delete_post(pitch_id):
-    pitch = Pitch.query.get(pitch_id)
-    db.session.delete(pitch)
+    pitch_delete = Pitch.query.get(pitch_id)
+    db.session.delete(pitch_delete)
     db.session.commit()
     flash('Your blog has been deleted!')
-    return redirect(url_for('main.index'))
+    return redirect(url_for('main.index', pitch_id=pitch_id))
 
 @main.route("/delete_comment/<int:pitch_id>/<int:comment_id>",methods= ['POST'])
 @login_required
@@ -108,7 +108,7 @@ def delete_comment(comment_id,pitch_id):
     db.session.delete(comment)
     db.session.commit()
     flash('Comment has been deleted!')
-    return redirect(url_for('.comment', pitch_id = pitch_id))
+    return redirect(url_for('.comment', pitch_id = pitch_id,comment_id=comment_id))
 
 @main.route("/update_post/<int:pitch_id>",methods= ['POST','GET'])
 @login_required
