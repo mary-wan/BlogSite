@@ -11,7 +11,7 @@ from ..request import get_quotes
 
 @main.route('/',methods = ['POST','GET'])
 def index():
-    pitches = Pitch.query.order_by(Pitch.time.desc()).all()
+    pitches = Pitch.query.all()
     quotes = get_quotes()
     form = SubscribeForm()
     if form.validate_on_submit():
@@ -125,4 +125,10 @@ def update_post(pitch_id):
         form.title.data = pitch.title
         form.post.data = pitch.post
     return render_template('new_blog.html',form=form, titl='Update Blog')
+
+@main.route('/latest',methods = ['POST','GET'])
+def latest():
+    pitches = Pitch.query.order_by(Pitch.time.desc()).all()
+    
+    return render_template('latest.html', pitches = pitches)
 
