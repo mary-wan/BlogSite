@@ -1,4 +1,5 @@
 {% extends 'base.html'%}
+{% import 'bootstrap/wtf.html' as wtf %}
 {% import 'macros.html' as macro%}
 <!-- Styles block -->
 {% block styles%}
@@ -20,15 +21,14 @@
         <div class="col-md-8" id="pitches"><br>
             {% for pitch in pitches %}
             <article class="media content-section">
-                {% if user == current_user %}
-                {% if user.profile_pic_path %}
-                <img src="{{url_for('static',filename=user.profile_pic_path)}}" alt=""
-                    class="rounded-circle article-img">
-                {%else%}
-                <img src="{{url_for('static', filename='photos/default.png')}}" alt=""
-                    class="rounded-circle article-img">
-                {% endif %}
-                {% endif %}
+                    {% if pitch.user.profile_pic_path %}
+                    <img src="{{url_for('static',filename=pitch.user.profile_pic_path)}}" alt=""
+                        class="rounded-circle article-img">  
+                    {%else%}
+                    <img src="{{url_for('static', filename='photos/default.png')}}" alt=""
+                        class="rounded-circle article-img">
+                    {% endif %}               
+   
                 <div class="media-body">
                     <div class="article-metadata">
                         <p>Blog by: <strong>{{ pitch.user.username }}</strong> </p>
@@ -86,10 +86,8 @@
                 <p><i class="fa fa-quote-left"></i> {{quotes.quote}} <i class="fa fa-quote-right"></i></p>
                 <p class="text-center">--- {{quotes.author}} ---</p>
             </div>
-            <form>
-                <input type="text" name="email" id="email" placeholder="Enter your email" class="form-control">
-                <input type="submit" class="btn btn-info btn-sm mt-1" value="Subscribe">
-            </form>
+           
+            {{wtf.quick_form(form ,button_map={'submit':'info'})}}
         </div>
     </div>
 </div>

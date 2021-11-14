@@ -4,15 +4,8 @@
   {% if pitches %}
   {% for pitch in pitches %}
   <article class="media content-section">
-    {% if pitch.user.profile_pic_path %}
-    <img src="{{url_for('static',filename=pitch.user.profile_pic_path)}}" alt="" class="rounded-circle article-img">
-
-    {%else%}
-    <img src="{{url_for('static', filename='photos/default.png')}}" alt="" class="rounded-circle article-img">
-    {% endif %}
     <div class="media-body">
       <div class="article-metadata">
-        <p>Blog by: <strong>{{ pitch.user.username }}</strong> </p>
         <small class="text-muted">Posted on {{ pitch.time.strftime('%Y-%m-%d') }}</small>
         {% if user == current_user %}
         <span class="pl-2">

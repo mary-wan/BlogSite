@@ -1,17 +1,29 @@
 from flask import render_template,request,redirect,url_for,abort,flash
+
+from app.email import mail_message
 from . import main
 from flask_login import login_required,current_user
-from ..models import User,Pitch,Comment
-from .forms import UpdateProfile,BlogForm,CommentForm,UpdateBlog
+from ..models import Subscriber, User,Pitch,Comment
+from .forms import UpdateProfile,BlogForm,CommentForm,UpdateBlog,SubscribeForm
 from .. import db,photos
 from ..request import get_quotes
 
 
-@main.route('/')
+@main.route('/',methods = ['POST','GET'])
 def index():
     pitches = Pitch.query.all()
     quotes = get_quotes()
-    return render_template('index.html', pitches = pitches,quotes =quotes,user=current_user)
+    form = SubscribeForm()
+    if form.validate_on_submit():
+        email = form.email.data
+
+        new_subscriber=Subscriber(email=email)
+        new_subscriber.save_subscriber()
+        mail_message("Subscribed to D-Blog","email/subscribe",new_subscriber.email,new_subscriber=new_subscriber)
+        flash('Sucessfully subscribed')
+        return redirect(url_for('main.index'))
+    
+    return render_template('index.html', pitches = pitches,quotes =quotes,user=current_user, form= form)
 
 @main.route('/create_new', methods = ['POST','GET'])
 @login_required
@@ -113,4 +125,4 @@ def update_post(pitch_id):
         form.title.data = pitch.title
         form.post.data = pitch.post
     return render_template('new_blog.html',form=form, titl='Update Blog')
-    
+
