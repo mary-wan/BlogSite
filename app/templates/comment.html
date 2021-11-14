@@ -8,20 +8,54 @@
 <div class="container pt-3">
     <div class="row">
         {% if comments %}
-        <div class="col-md-5">
+        <div class="col-md-6">
             <h3 class="text-center title italic">Comments for the Post</h3>
             {% for comment in comments %}
-            <div class="card mb-2 p-0">
-                <div class="card-body">
-                    <h6 class="card-header m-0">{{comment.pitch.title}}</h6>
-                    <p class="card-title">{{ comment.comment }}</p>
-                    <p class="card-text">--- {{comment.user.username}} ---</p>
+            <article class="media content-section">
+                {% if pitch.user.profile_pic_path %}
+                <img src="{{url_for('static',filename=pitch.user.profile_pic_path)}}" alt="" class="rounded-circle article-img">
+            
+                {%else%}
+                <img src="{{url_for('static', filename='photos/default.png')}}" alt="" class="rounded-circle article-img">
+                {% endif %}
+                <div class="media-body">
+                  <div class="article-metadata">
+                    <a class="mr-2" href="#">{{ pitch.user.username }}</a>
+                    <small class="text-muted">{{ pitch.time.strftime('%Y-%m-%d') }}</small>
+                    <div>
+                      <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal"
+                        data-target=".deleteModal-modal-sm">Delete</button>
+                    </div>
+                  </div>
+                  <h5 class="article-title">{{ comment.pitch.title }}</h5>
+                  <p class="article-content">{{ comment.comment }}</p>
+                </div>
+                <div class="modal fade deleteModal-modal-sm" id="" tabindex="-1" role="dialog"
+                aria-labelledby="deleteModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-sm" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <p class="modal-title" id="deleteModalLabel">Are you sure you want to delete?</p>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                            <form action="{{ url_for('main.delete_comment',comment_id = comment.id,pitch_id=pitch.id) }}" method="POST">
+                                <input class="btn btn-danger btn-sm" type="submit" value="Delete">
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
+              </article>
+            
             {% endfor %}
         </div>
+       
         <div class="col-md-2"></div>
-        <div class="col-md-5 pt-3">
+        <div class="col-md-4 pt-3">
             {{wtf.quick_form(form ,button_map={'submit':'outline-primary'})}}
         </div>
     </div>

@@ -1,31 +1,62 @@
 <link rel="stylesheet" href="{{url_for('static',filename='css/style.css')}}">
 {% macro display(pitches) %}
 <div class="">
-  <div class="">
-    {% if pitches %}
-    {% for pitch in pitches %}
-    <div class="">
-      <div class="content-section p-0">
-          <p class="m-0 p-0"><strong>{{pitch.title}}</strong></p>
-          <p class="m-0 p-0">{{pitch.post}}</p><br>
-          <div>
-            <span class="pl-4"><a href="{{url_for('main.comment',pitch_id = pitch.id)}}" class="btn btn-outline-primary btn-sm"> Comment</a></span>
-          </div><br>
-        <div class="card-footer text-muted">
-          <p class="text-center p-0 m-0">Posted by: {{pitch.user.username}} on {{pitch.time.strftime('%Y-%m-%d')}}</p>
+  {% if pitches %}
+  {% for pitch in pitches %}
+  <article class="media content-section">
+    {% if pitch.user.profile_pic_path %}
+    <img src="{{url_for('static',filename=pitch.user.profile_pic_path)}}" alt="" class="rounded-circle article-img">
+
+    {%else%}
+    <img src="{{url_for('static', filename='photos/default.png')}}" alt="" class="rounded-circle article-img">
+    {% endif %}
+    <div class="media-body">
+      <div class="article-metadata">
+        <a class="mr-2" href="#">{{ pitch.user.username }}</a>
+        <small class="text-muted">{{ pitch.time.strftime('%Y-%m-%d') }}</small>
+        {% if user == current_user %}
+        <div>
+          <a class="btn btn-secondary btn-sm mt-1 mb-1" href="#">Update</a>
+          <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal"
+            data-target=".deleteModal-modal-sm">Delete</button>
+        </div>
+        {% endif %}
+      </div>
+      <h5 class="article-title">{{ pitch.title }}</h5>
+      <p class="article-content">{{ pitch.post }}</p>
+
+      <a href="{{url_for('main.comment',pitch_id = pitch.id)}}"><span style="font-size: 1em;  color:black"><i class="fas fa-comment-alt"></i></i></span> {{pitch.comment.count()}} Comments</a>
+    </div>
+  </article>
+  <!-- Modal -->
+  <div class="modal fade deleteModal-modal-sm" id="" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-sm" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deleteModalLabel">Are you sure you want to delete?</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <form action="#" method="POST">
+            <input class="btn btn-danger" type="submit" value="Delete">
+          </form>
         </div>
       </div>
     </div>
-
-    {% endfor %}
-    {% else %}
-    <div class="card">
-      <div class="card-body">
-
-        <p class="card-title">No blogs posted yet</p>
-      </div>
-    </div>
-    {% endif %}
   </div>
+  </article>
+  {% endfor %}
+  {% else %}
+  <div class="card">
+    <div class="card-body">
+
+      <p class="card-title">No blogs posted yet</p>
+    </div>
+  </div>
+  {% endif %}
 </div>
 {% endmacro %}

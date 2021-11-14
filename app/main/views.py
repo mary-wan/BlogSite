@@ -1,8 +1,8 @@
-from flask import render_template,request,redirect,url_for,abort
+from flask import render_template,request,redirect,url_for,abort,flash
 from . import main
 from flask_login import login_required,current_user
 from ..models import User,Pitch,Comment
-from .forms import UpdateProfile,PitchForm,CommentForm
+from .forms import UpdateProfile,BlogForm,CommentForm
 from .. import db,photos
 from ..request import get_quotes
 
@@ -11,12 +11,12 @@ from ..request import get_quotes
 def index():
     pitches = Pitch.query.all()
     quotes = get_quotes()
-    return render_template('index.html', pitches = pitches,quotes =quotes, user=current_user)
+    return render_template('index.html', pitches = pitches,quotes =quotes,user=current_user)
 
 @main.route('/create_new', methods = ['POST','GET'])
 @login_required
 def new_pitch():
-    form = PitchForm()
+    form = BlogForm()
     if form.validate_on_submit():
         title = form.title.data
         post = form.post.data
@@ -82,3 +82,22 @@ def update_pic(uname):
         user.profile_pic_path = path
         db.session.commit()
     return redirect(url_for('main.profile',uname=uname))
+
+
+@main.route("/pitch/<int:pitch_id>/delete",methods= ['POST'])
+@login_required
+def delete_post(pitch_id):
+    pitch = Pitch.query.get(pitch_id)
+    db.session.delete(pitch)
+    db.session.commit()
+    flash('Your post has been deleted!')
+    return redirect(url_for('main.index'))
+
+@main.route("/delete_comment/<int:pitch_id>/<int:comment_id>",methods= ['POST'])
+@login_required
+def delete_comment(comment_id,pitch_id):
+    comment = Comment.query.filter_by(id=comment_id).first()
+    db.session.delete(comment)
+    db.session.commit()
+    # flash('Comment has been deleted!')
+    return redirect(url_for('.comment', pitch_id = pitch_id))
