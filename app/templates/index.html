@@ -8,46 +8,54 @@
 <!-- Content block -->
 {% block content %}
 
-<div class="container pt-3">
+<div class="container-fluid pt-3">
     {% for message in get_flashed_messages() %}
     <div class="alert alert-info">
         <button type="button" class="close" data-dismiss="alert">&times;</button>
         {{ message }}
     </div>
     {% endfor %}
-    <a class="btn btn-info btn-sm" href="{{url_for('main.new_pitch')}}">POST</a>
+    <a class="btn btn-info btn-sm" href="{{url_for('main.new_pitch')}}">NEW BLOG</a>
     <div class="blogs row">
-        <div class="col-md-7" id="pitches"><br>
+        <div class="col-md-8" id="pitches"><br>
             {% for pitch in pitches %}
             <article class="media content-section">
                 {% if user == current_user %}
                 {% if user.profile_pic_path %}
-                    <img src="{{url_for('static',filename=user.profile_pic_path)}}" alt=""
-                        class="rounded-circle article-img">
-                    {%else%}
-                    <img src="{{url_for('static', filename='photos/default.png')}}" alt=""
-                        class="rounded-circle article-img">
-                    {% endif %}
+                <img src="{{url_for('static',filename=user.profile_pic_path)}}" alt=""
+                    class="rounded-circle article-img">
+                {%else%}
+                <img src="{{url_for('static', filename='photos/default.png')}}" alt=""
+                    class="rounded-circle article-img">
+                {% endif %}
                 {% endif %}
                 <div class="media-body">
                     <div class="article-metadata">
-                        <a class="mr-2" href="#">{{ pitch.user.username }}</a>
-                        <small class="text-muted">{{ pitch.time.strftime('%Y-%m-%d') }}</small>
+                        <p>Blog by: <strong>{{ pitch.user.username }}</strong> </p>
+                        <small class="text-muted">Posted on {{ pitch.time.strftime('%Y-%m-%d') }}</small>
                         {% if pitch.user == current_user %}
-                        <div>
-                            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="#">Update</a>
+                        <span class="pl-2">
+                            <a class="btn btn-info btn-sm mt-1 mb-1"
+                                href="{{ url_for('main.update_post', pitch_id = pitch.id) }}">Update</a>
                             <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal"
                                 data-target=".deleteModal-modal-sm">Delete</button>
-                        </div>
+                        </span>
                         {% endif %}
                     </div>
                     <h5 class="article-title">{{ pitch.title }}</h5>
                     <p class="article-content">{{ pitch.post }}</p>
 
-                    <a href="{{url_for('main.comment',pitch_id = pitch.id)}}"><span style="font-size: 1em;  color:black"><i class="fas fa-comment-alt"></i></i></span> {{pitch.comment.count()}} Comments</a>
+                    <span>
+                        <a class="btn btn-info btn-sm mt-1 mb-1 comment-button ml-1"
+                        href="{{url_for('main.comment',pitch_id = pitch.id)}}">Comment</a>
+                        <a class="ml-2" href="{{url_for('main.comment',pitch_id = pitch.id)}}"><span
+                                style="font-size: 1em;  color:black"><i class="fas fa-comment-alt"></i></i></span>
+                            {{pitch.comment.count()}} Comments</a>
+                       
+                    </span>
                 </div>
             </article>
-            <!-- Modal -->
+
             <div class="modal fade deleteModal-modal-sm" id="" tabindex="-1" role="dialog"
                 aria-labelledby="deleteModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-sm" role="document">
@@ -72,7 +80,7 @@
         </div>
         <div class="col-md-1">
         </div>
-        <div class="col-md-4 mt-3">
+        <div class="col-md-3 mt-3">
             <div class="content-section">
                 <h6 class="title italic">Daily Motivation</h6>
                 <p><i class="fa fa-quote-left"></i> {{quotes.quote}} <i class="fa fa-quote-right"></i></p>

@@ -10,25 +10,24 @@
         {% if comments %}
         <div class="col-md-6">
             <h3 class="text-center title italic">Comments for the Post</h3>
+            {% for message in get_flashed_messages() %}
+            <div class="alert alert-info">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                {{ message }}
+            </div>
+            {% endfor %}
             {% for comment in comments %}
             <article class="media content-section">
-                {% if pitch.user.profile_pic_path %}
-                <img src="{{url_for('static',filename=pitch.user.profile_pic_path)}}" alt="" class="rounded-circle article-img">
-            
-                {%else%}
-                <img src="{{url_for('static', filename='photos/default.png')}}" alt="" class="rounded-circle article-img">
-                {% endif %}
                 <div class="media-body">
                   <div class="article-metadata">
-                    <a class="mr-2" href="#">{{ pitch.user.username }}</a>
-                    <small class="text-muted">{{ pitch.time.strftime('%Y-%m-%d') }}</small>
-                    <div>
-                      <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal"
-                        data-target=".deleteModal-modal-sm">Delete</button>
-                    </div>
+                    <a class="mr-2" href="#">{{ comment.user.username }}</a>
                   </div>
                   <h5 class="article-title">{{ comment.pitch.title }}</h5>
                   <p class="article-content">{{ comment.comment }}</p>
+                  <div>
+                    <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal"
+                      data-target=".deleteModal-modal-sm">Delete</button>
+                  </div>
                 </div>
                 <div class="modal fade deleteModal-modal-sm" id="" tabindex="-1" role="dialog"
                 aria-labelledby="deleteModalLabel" aria-hidden="true">
@@ -56,7 +55,7 @@
        
         <div class="col-md-2"></div>
         <div class="col-md-4 pt-3">
-            {{wtf.quick_form(form ,button_map={'submit':'outline-primary'})}}
+            {{wtf.quick_form(form ,button_map={'submit':'info'})}}
         </div>
     </div>
     {%else%}
@@ -70,7 +69,7 @@
     </div>
     <div class="col-md-2"></div>
     <div class="col-md-5">
-        {{wtf.quick_form(form, button_map={'submit':'outline-primary'})}}
+        {{wtf.quick_form(form, button_map={'submit':'info'})}}
     </div>
 
     {%endif%}

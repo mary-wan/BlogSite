@@ -2,7 +2,7 @@ from flask import render_template,request,redirect,url_for,abort,flash
 from . import main
 from flask_login import login_required,current_user
 from ..models import User,Pitch,Comment
-from .forms import UpdateProfile,BlogForm,CommentForm
+from .forms import UpdateProfile,BlogForm,CommentForm,UpdateBlog
 from .. import db,photos
 from ..request import get_quotes
 
@@ -19,13 +19,12 @@ def new_pitch():
     form = BlogForm()
     if form.validate_on_submit():
         title = form.title.data
-        post = form.post.data
-              
+        post = form.post.data         
         new_pitch = Pitch(title = title,post=post,user=current_user)
         new_pitch.save_pitch()
         return redirect(url_for('main.index'))
         
-    return render_template('new_blog.html', form = form)
+    return render_template('new_blog.html', form = form,titl = "Create Blog"   )
 
 @main.route('/comment/<int:pitch_id>', methods = ['POST','GET'])
 @login_required
@@ -60,16 +59,13 @@ def update_profile(uname):
         abort(404)
 
     form = UpdateProfile()
-
     if form.validate_on_submit():
         user.bio = form.bio.data  
         db.session.add(user)
         db.session.commit()
-
         return redirect(url_for('.profile',uname=user.username))
 
     return render_template('profile/update.html',form =form)
-
 
 
 @main.route('/user/<uname>/update/pic',methods= ['POST'])
@@ -90,7 +86,7 @@ def delete_post(pitch_id):
     pitch = Pitch.query.get(pitch_id)
     db.session.delete(pitch)
     db.session.commit()
-    flash('Your post has been deleted!')
+    flash('Your blog has been deleted!')
     return redirect(url_for('main.index'))
 
 @main.route("/delete_comment/<int:pitch_id>/<int:comment_id>",methods= ['POST'])
@@ -99,5 +95,22 @@ def delete_comment(comment_id,pitch_id):
     comment = Comment.query.filter_by(id=comment_id).first()
     db.session.delete(comment)
     db.session.commit()
-    # flash('Comment has been deleted!')
+    flash('Comment has been deleted!')
     return redirect(url_for('.comment', pitch_id = pitch_id))
+
+@main.route("/update_post/<int:pitch_id>",methods= ['POST','GET'])
+@login_required
+def update_post(pitch_id):
+    pitch = Pitch.query.get(pitch_id)
+    form = UpdateBlog()
+    if form.validate_on_submit():
+        pitch.title =form.title.data
+        pitch.post = form.post.data
+        db.session.commit()
+        flash('Your post has been updated!',)
+        return redirect(url_for('main.index',pitch_id=pitch_id))
+    elif request.method == 'GET':
+        form.title.data = pitch.title
+        form.post.data = pitch.post
+    return render_template('new_blog.html',form=form, titl='Update Blog')
+    
